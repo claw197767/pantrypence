@@ -8,7 +8,7 @@ export default function Home() {
         <div className="flex items-center gap-5 text-sm font-semibold">
           <a href="#features" className="hidden sm:block">Features</a>
           <a href="#how" className="hidden sm:block">How it works</a>
-          <a href="#contact" className="rounded-full bg-[#183b2b] px-5 py-3 text-white">
+          <a href="/api/checkout" className="rounded-full bg-[#183b2b] px-5 py-3 text-white">
             Get started
           </a>
         </div>
@@ -29,7 +29,7 @@ export default function Home() {
             and discover where your money is going.
           </p>
           <div className="mt-9 flex flex-wrap gap-4">
-            <a href="#contact" className="rounded-full bg-[#183b2b] px-8 py-4 font-bold text-white shadow-lg">
+            <a href="/api/checkout" className="rounded-full bg-[#183b2b] px-8 py-4 font-bold text-white shadow-lg">
               Get started today →
             </a>
             <a href="#features" className="rounded-full border border-[#183b2b] px-8 py-4 font-bold">
