@@ -35,7 +35,14 @@ export async function POST() {
       cancel_url: `${siteUrl}/?checkout=cancelled`,
     });
 
-    return NextResponse.json({ url: session.url });
+ if (!session.url) {
+  return NextResponse.json(
+    { error: 'Checkout failed.'},
+    { status: 500 }
+  );
+}
+
+return NextResponse.redirect(session.url, 303);
   } catch {
     return NextResponse.json(
       { error: "Unable to create checkout session." },
