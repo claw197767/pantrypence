@@ -1,6 +1,21 @@
+import { Suspense } from "react";
 import Link from "next/link";
 
-export default async function SignedOutPage({
+export default function SignedOutPage(props: PageProps<"/signed-out">) {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-[#f7f7ef] px-6 py-16 text-[#183b2b]">
+          <p role="status">Loading sign-out status…</p>
+        </main>
+      }
+    >
+      <SignedOutContent {...props} />
+    </Suspense>
+  );
+}
+
+async function SignedOutContent({
   searchParams,
 }: PageProps<"/signed-out">) {
   const { status } = await searchParams;
