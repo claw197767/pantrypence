@@ -1,10 +1,24 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { Suspense, type FormEvent, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-[#111318] px-6 py-16 text-[#f4f1ea]">
+          <p role="status" className="text-sm text-[#b3b5bb]">Loading secure sign-in…</p>
+        </main>
+      }
+    >
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
   const searchParams = useSearchParams();
   const requestedNext = searchParams.get("next") ?? "/welcome";
   const nextPath = requestedNext.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/welcome";
