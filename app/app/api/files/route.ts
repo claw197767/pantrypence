@@ -1,8 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export const runtime = "nodejs";
-
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const SIGNED_URL_TTL_SECONDS = 60;
 const ALLOWED_TYPES = new Set([
@@ -13,17 +11,16 @@ const ALLOWED_TYPES = new Set([
   "image/png",
 ]);
 
-function isAdmin(user: { app_metadata?: Record<string, unknown> }) {
-  return user.app_metadata?.role === "admin";
-}
-
 function jsonError(message: string, status: number) {
   return NextResponse.json({ error: message }, { status });
 }
 
 export async function GET(request: NextRequest) {
   const supabase = await createSupabaseServerClient();
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
 
   if (authError || !user) return jsonError("Authentication required.", 401);
 
@@ -31,7 +28,9 @@ export async function GET(request: NextRequest) {
   if (!fileId) {
     const { data, error } = await supabase
       .from("user_files")
-      .select("id, owner_id, uploaded_by_email, original_filename, content_type, file_size, created_at")
+      .select(
+        "id, owner_id, uploaded_by_email, original_filename, content_type, file_size, created_at",
+      )
       .order("created_at", { ascending: false });
 
     if (error) return jsonError("Unable to list files.", 500);
@@ -40,7 +39,9 @@ export async function GET(request: NextRequest) {
 
   const { data: file, error: fileError } = await supabase
     .from("user_files")
-    .select("id, owner_id, uploaded_by_email, original_filename, content_type, file_size, object_path, created_at")
+    .select(
+      "id, owner_id, uploaded_by_email, original_filename, content_type, file_size, object_path, created_at",
+    )
     .eq("id", fileId)
     .maybeSingle();
 
@@ -69,7 +70,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const supabase = await createSupabaseServerClient();
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
 
   if (authError || !user) return jsonError("Authentication required.", 401);
 
@@ -84,16 +88,19 @@ export async function POST(request: NextRequest) {
   if (!(file instanceof File) || file.size === 0) {
     return jsonError("Choose a non-empty file to upload.", 400);
   }
-  if (file.size > MAX_FILE_SIZE) return jsonError("Files must be 10 MB or smaller.", 413);
+  if (file.size > MAX_FILE_SIZE) {
+    return jsonError("Files must be 10 MB or smaller.", 413);
+  }
   if (!ALLOWED_TYPES.has(file.type)) {
     return jsonError("Supported files: PDF, CSV, XLSX, JPEG, and PNG.", 415);
   }
 
-  const originalFilename = file.name
-    .replace(/[\\/]/g, "_")
-    .replace(/[^\w.() -]/g, "_")
-    .trim()
-    .slice(0, 120) || "upload";
+  const originalFilename =
+    file.name
+      .replace(/[\\/]/g, "_")
+      .replace(/[^\w.() -]/g, "_")
+      .trim()
+      .slice(0, 120) || "upload";
   const objectPath = `${user.id}/${crypto.randomUUID()}-${originalFilename}`;
   const { error: uploadError } = await supabase.storage
     .from("user-files")
@@ -114,7 +121,9 @@ export async function POST(request: NextRequest) {
       content_type: file.type,
       file_size: file.size,
     })
-    .select("id, owner_id, uploaded_by_email, original_filename, content_type, file_size, created_at")
+    .select(
+      "id, owner_id, uploaded_by_email, original_filename, content_type, file_size, created_at",
+    )
     .single();
 
   if (metadataError || !metadata) {
