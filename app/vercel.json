@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://pantrypence.co.uk/$1",
+      "has": [{ "type": "host", "value": "www.pantrypence.co.uk" }],
+      "statusCode": 308
+    }
+  ]
+}
