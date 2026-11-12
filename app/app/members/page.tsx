@@ -1,10 +1,31 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export default async function MembersPage() {
+export default function MembersPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-[#111318] px-6 py-16 text-[#f4f1ea]">
+          <div className="mx-auto max-w-5xl">
+            <p role="status" className="text-sm text-[#b3b5bb]">
+              Checking your membership…
+            </p>
+          </div>
+        </main>
+      }
+    >
+      <MembersContent />
+    </Suspense>
+  );
+}
+
+async function MembersContent() {
   const supabase = await createSupabaseServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) redirect("/login?next=%2Fmembers");
 
   const { data: membership } = await supabase
