@@ -1,4 +1,10 @@
-const sectors = ["Pubs", "QSR", "Contract Catering", "Fine Dining"];
+const sectors = [
+  "Public houses",
+  "Hotels",
+  "Quick Service Restaurants",
+  "Fine Dining",
+  "Contract Catering",
+];
 
 const features = [
   ["📊", "Invoice analysis", "Understand supplier spending and identify changes in purchasing costs."],
@@ -51,11 +57,11 @@ export default function Home() {
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#858991]">
               Built for your sector
             </p>
-            <div className="mt-4 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="mt-4 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
               {sectors.map((sector) => (
                 <div
                   key={sector}
-                  className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-4 text-center text-sm font-semibold text-[#e7e4dc] transition hover:border-[#d6b36a]/60 hover:bg-[#d6b36a]/[0.07]"
+                  className="flex min-h-16 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] px-3 py-4 text-center text-sm font-semibold text-[#e7e4dc] transition hover:border-[#d6b36a]/60 hover:bg-[#d6b36a]/[0.07]"
                 >
                   {sector}
                 </div>
