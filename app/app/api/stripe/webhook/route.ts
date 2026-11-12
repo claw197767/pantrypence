@@ -23,6 +23,15 @@ async function storeSubscription(
   const userId = userIdHint ?? subscription.metadata?.supabase_user_id;
   if (!userId) throw new Error("Subscription is missing its PantryPence user ID.");
 
+  // With the Stripe API version used by this project, billing periods are exposed
+  // on subscription items rather than on the subscription object itself.
+  const periodEnds = subscription.items.data
+    .map((item) => item.current_period_end)
+    .filter((timestamp): timestamp is number => typeof timestamp === "number");
+  const currentPeriodEnd = periodEnds.length
+    ? new Date(Math.max(...periodEnds) * 1000).toISOString()
+    : null;
+
   const supabase = getAdminSupabase();
   const { error } = await supabase.from("user_subscriptions").upsert(
     {
@@ -30,7 +39,7 @@ async function storeSubscription(
       stripe_customer_id: asId(subscription.customer),
       stripe_subscription_id: subscription.id,
       status: subscription.status,
-      current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+      current_period_end: currentPeriodEnd,
       updated_at: new Date().toISOString(),
     },
     { onConflict: "stripe_subscription_id" },
