@@ -1,8 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getFileAccess } from "@/lib/membership";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const SIGNED_URL_TTL_SECONDS = 60;
+const FILES_PER_PAGE = 50;
 const ALLOWED_TYPES = new Set([
   "application/pdf",
   "text/csv",
@@ -24,17 +26,41 @@ export async function GET(request: NextRequest) {
 
   if (authError || !user) return jsonError("Authentication required.", 401);
 
+  let access;
+  try {
+    access = await getFileAccess(supabase, user);
+  } catch {
+    return jsonError("Unable to check membership.", 500);
+  }
+  if (!access.canRead) return jsonError("An active membership is required to access files.", 403);
+
   const fileId = request.nextUrl.searchParams.get("id");
   if (!fileId) {
-    const { data, error } = await supabase
+    const pageParam = request.nextUrl.searchParams.get("page") ?? "0";
+    if (!/^\d+$/.test(pageParam) || !Number.isSafeInteger(Number(pageParam) * FILES_PER_PAGE)) {
+      return jsonError("Invalid page.", 400);
+    }
+    const offset = Number(pageParam) * FILES_PER_PAGE;
+    let query = supabase
       .from("user_files")
       .select(
         "id, owner_id, uploaded_by_email, original_filename, content_type, file_size, created_at",
-      )
-      .order("created_at", { ascending: false });
+      );
+    if (request.nextUrl.searchParams.get("scope") === "own") {
+      query = query.eq("owner_id", user.id);
+    }
+    const { data, error } = await query
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false })
+      .range(offset, offset + FILES_PER_PAGE);
 
     if (error) return jsonError("Unable to list files.", 500);
-    return NextResponse.json({ files: data });
+    return NextResponse.json({
+      files: data.slice(0, FILES_PER_PAGE),
+      hasMore: data.length > FILES_PER_PAGE,
+      isAdmin: access.isAdmin,
+      canUpload: access.active,
+    });
   }
 
   const { data: file, error: fileError } = await supabase
@@ -76,6 +102,14 @@ export async function POST(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   if (authError || !user) return jsonError("Authentication required.", 401);
+
+  let access;
+  try {
+    access = await getFileAccess(supabase, user);
+  } catch {
+    return jsonError("Unable to check membership.", 500);
+  }
+  if (!access.active) return jsonError("An active membership is required to upload files.", 403);
 
   let formData: FormData;
   try {

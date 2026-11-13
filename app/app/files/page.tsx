@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 type UserFile = {
   id: string;
@@ -13,7 +14,7 @@ type UserFile = {
   signed_url?: string;
 };
 
-type PageStatus = "loading" | "ready" | "unauthenticated" | "error";
+type PageStatus = "loading" | "ready" | "unauthenticated" | "forbidden" | "error";
 
 export default function FilesPage() {
   const [files, setFiles] = useState<UserFile[]>([]);
@@ -21,45 +22,57 @@ export default function FilesPage() {
   const [status, setStatus] = useState<PageStatus>("loading");
   const [message, setMessage] = useState("Loading your files…");
   const [uploading, setUploading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [canUpload, setCanUpload] = useState(false);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const fileSummary = useMemo(
     () => files.reduce((total, file) => total + Number(file.file_size || 0), 0),
     [files],
   );
 
-  async function loadFiles() {
-    setStatus("loading");
-    setMessage("Loading your files…");
+  async function loadFiles(nextPage = 0) {
+    await fetch(`/api/files?scope=own&page=${nextPage}`, { cache: "no-store" })
+      .then(async (response) => {
+        const data = await response.json().catch(() => ({}));
 
-    try {
-      const response = await fetch("/api/files", { cache: "no-store" });
-      const data = await response.json().catch(() => ({}));
+        if (response.status === 401) {
+          setFiles([]);
+          setStatus("unauthenticated");
+          setMessage("Please sign in to manage your private files.");
+          return;
+        }
 
-      if (response.status === 401) {
-        setFiles([]);
-        setStatus("unauthenticated");
-        setMessage("Please sign in to manage your private files.");
-        return;
-      }
+        if (response.status === 403) {
+          setFiles([]);
+          setStatus("forbidden");
+          setMessage(data?.error || "An active membership is required to access files.");
+          return;
+        }
 
-      if (!response.ok) {
+        if (!response.ok) {
+          setFiles([]);
+          setStatus("error");
+          setMessage(data?.error || "Unable to load your files right now.");
+          return;
+        }
+
+        const loadedFiles: UserFile[] = Array.isArray(data.files) ? data.files : [];
+        setFiles((previous) => nextPage === 0 ? loadedFiles : [...previous, ...loadedFiles]);
+        setIsAdmin(data.isAdmin === true);
+        setCanUpload(data.canUpload === true);
+        setPage(nextPage);
+        setHasMore(data.hasMore === true);
+        setStatus("ready");
+        setMessage("");
+      })
+      .catch(() => {
         setFiles([]);
         setStatus("error");
-        setMessage(data?.error || "Unable to load your files right now.");
-        return;
-      }
-
-      const loadedFiles: UserFile[] = Array.isArray(data.files) ? data.files : [];
-      setFiles(loadedFiles);
-      setStatus("ready");
-      setMessage(loadedFiles.length > 0
-        ? `${loadedFiles.length} file${loadedFiles.length === 1 ? "" : "s"} ready`
-        : "No files uploaded yet.");
-    } catch {
-      setFiles([]);
-      setStatus("error");
-      setMessage("Unable to load your files right now.");
-    }
+        setMessage("Unable to load your files right now.");
+      });
   }
 
   useEffect(() => {
@@ -89,8 +102,8 @@ export default function FilesPage() {
       }
 
       setSelectedFile(null);
-      setStatus("ready");
-      setMessage("Upload complete.");
+      setStatus("loading");
+      setMessage("Loading your files…");
       await loadFiles();
     } catch {
       setStatus("error");
@@ -110,7 +123,7 @@ export default function FilesPage() {
         setMessage(data?.error || "This file cannot be downloaded right now.");
         return;
       }
-      window.open(signedUrl, "_blank", "noopener,noreferrer");
+      window.location.assign(signedUrl);
     } catch {
       setStatus("error");
       setMessage("This file cannot be downloaded right now.");
@@ -130,6 +143,8 @@ export default function FilesPage() {
           </a>
         </div>
 
+        {isAdmin ? <a href="/admin/files" className="mb-6 inline-block text-sm font-bold text-[#e2c681] underline underline-offset-4">View all member documents</a> : null}
+        {canUpload ? (
         <form onSubmit={handleUpload} className="rounded-3xl border border-white/10 bg-[#1b1e25] p-6 shadow-xl">
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div className="flex-1">
@@ -151,19 +166,20 @@ export default function FilesPage() {
           </div>
           <p className="mt-4 text-sm text-[#aeb1b8]">Supported file types: PDF, CSV, XLSX, JPG, PNG. Max size: 10 MB.</p>
         </form>
+        ) : null}
 
         <section className="mt-8 grid gap-4 md:grid-cols-3">
           <div className="rounded-3xl border border-[#d6b36a]/20 bg-[#d6b36a]/[0.08] p-5">
-            <p className="text-xs uppercase tracking-[0.2em] text-[#d6b36a]">Files</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d6b36a]">Files shown</p>
             <p className="mt-4 text-3xl font-semibold">{files.length}</p>
           </div>
           <div className="rounded-3xl border border-white/10 bg-[#1b1e25] p-5">
-            <p className="text-xs uppercase tracking-[0.2em] text-[#aeb1b8]">Storage used</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#aeb1b8]">Storage shown</p>
             <p className="mt-4 text-3xl font-semibold">{(fileSummary / 1024 / 1024).toFixed(2)} MB</p>
           </div>
           <div className="rounded-3xl border border-white/10 bg-[#1b1e25] p-5">
             <p className="text-xs uppercase tracking-[0.2em] text-[#aeb1b8]">Status</p>
-            <p className="mt-4 text-lg font-semibold">{status === "ready" ? "Secure" : status === "unauthenticated" ? "Sign in required" : status === "error" ? "Action needed" : "Checking"}</p>
+            <p className="mt-4 text-lg font-semibold">{status === "ready" ? "Secure" : status === "unauthenticated" ? "Sign in required" : status === "error" || status === "forbidden" ? "Action needed" : "Checking"}</p>
           </div>
         </section>
 
@@ -179,13 +195,17 @@ export default function FilesPage() {
 
           {status === "unauthenticated" ? (
             <div className="rounded-2xl border border-dashed border-white/20 bg-black/10 p-8 text-center text-[#aeb1b8]">
-              Sign in to view or upload bills, invoices, receipts, and supporting files.
+              <a href="/login?next=%2Ffiles" className="text-[#e2c681] underline">Sign in</a> to view or upload bills, invoices, receipts, and supporting files.
             </div>
-          ) : files.length === 0 ? (
+          ) : status === "forbidden" ? (
+            <div className="rounded-2xl border border-dashed border-white/20 bg-black/10 p-8 text-center text-[#aeb1b8]">
+              <Link href="/" className="text-[#e2c681] underline">Start a membership</Link> to access your files.
+            </div>
+          ) : status === "ready" && files.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-white/20 bg-black/10 p-8 text-center text-[#aeb1b8]">
               No files uploaded yet.
             </div>
-          ) : (
+          ) : files.length > 0 ? (
             <div className="space-y-3">
               {files.map((file) => (
                 <div key={file.id} className="flex flex-col gap-3 rounded-2xl border border-white/[0.07] bg-[#111318] p-4 md:flex-row md:items-center md:justify-between">
@@ -201,7 +221,10 @@ export default function FilesPage() {
                 </div>
               ))}
             </div>
-          )}
+          ) : null}
+          {status === "ready" && hasMore ? (
+            <button type="button" disabled={loadingMore} onClick={() => { setLoadingMore(true); void loadFiles(page + 1).finally(() => setLoadingMore(false)); }} className="mt-5 rounded-full border border-white/20 px-5 py-2.5 text-sm font-bold disabled:opacity-50">{loadingMore ? "Loading…" : "Load more files"}</button>
+          ) : null}
         </section>
       </div>
     </main>
