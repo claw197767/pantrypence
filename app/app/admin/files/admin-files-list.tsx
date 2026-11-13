@@ -7,26 +7,40 @@ type AdminFile = { id: string; owner_id: string; uploaded_by_email: string; orig
 export default function AdminFilesList() {
   const [files, setFiles] = useState<AdminFile[]>([]);
   const [message, setMessage] = useState("Loading files…");
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    void fetch("/api/files", { cache: "no-store" })
+  async function loadFiles(nextPage: number) {
+    await fetch(`/api/files?page=${nextPage}`, { cache: "no-store" })
       .then(async (response) => {
         const data = await response.json();
         if (!response.ok) throw new Error(data.error ?? "Unable to load files.");
-        setFiles(data.files ?? []);
-        setMessage(data.files?.length ? "" : "No uploaded files.");
+        setFiles((previous) => nextPage === 0 ? data.files : [...previous, ...data.files]);
+        setPage(nextPage);
+        setHasMore(data.hasMore === true);
+        setMessage(nextPage === 0 && !data.files.length ? "No uploaded files." : "");
       })
-      .catch((error: unknown) => setMessage(error instanceof Error ? error.message : "Unable to load files."));
+      .catch((error: unknown) => setMessage(error instanceof Error ? error.message : "Unable to load files."))
+      .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    void loadFiles(0);
   }, []);
 
   async function download(file: AdminFile) {
-    const response = await fetch(`/api/files?id=${encodeURIComponent(file.id)}`, { cache: "no-store" });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok || !data.file?.signed_url) {
-      setMessage(data.error ?? "Could not create a secure download link.");
-      return;
+    try {
+      const response = await fetch(`/api/files?id=${encodeURIComponent(file.id)}`, { cache: "no-store" });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.file?.signed_url) {
+        setMessage(data.error ?? "Could not create a secure download link.");
+        return;
+      }
+      window.location.assign(data.file.signed_url);
+    } catch {
+      setMessage("Could not create a secure download link.");
     }
-    window.open(data.file.signed_url, "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -44,6 +58,7 @@ export default function AdminFilesList() {
                 <p className="mt-1 text-sm text-[#aeb1b8]">Owner: {file.uploaded_by_email} · {file.owner_id}</p>
                 <p className="mt-1 text-xs text-[#858991]">{file.content_type} · {(file.file_size / 1024 / 1024).toFixed(2)} MB · {new Date(file.created_at).toLocaleString()}</p>
               </div>
+              {hasMore ? <button type="button" disabled={loading} onClick={() => { setLoading(true); void loadFiles(page + 1); }} className="mt-5 rounded-full border border-white/20 px-5 py-2.5 text-sm font-bold disabled:opacity-50">{loading ? "Loading…" : "Load more files"}</button> : null}
               <button onClick={() => void download(file)} className="rounded-full bg-[#d6b36a] px-5 py-2.5 text-sm font-bold text-[#171717]">Secure download</button>
             </article>
           ))}

@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getFileAccess } from "@/lib/membership";
 
 export default function MembersPage() {
   return (
@@ -28,16 +29,8 @@ async function MembersContent() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login?next=%2Fmembers");
 
-  const { data: membership } = await supabase
-    .from("user_subscriptions")
-    .select("status, current_period_end")
-    .eq("user_id", user.id)
-    .maybeSingle();
-  const active = Boolean(
-    membership &&
-      ["active", "trialing"].includes(membership.status) &&
-      (!membership.current_period_end || new Date(membership.current_period_end) > new Date()),
-  );
+  if (user.app_metadata?.role === "admin") redirect("/admin/files");
+  const { active } = await getFileAccess(supabase, user);
   if (!active) redirect("/welcome");
 
   return (

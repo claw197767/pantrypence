@@ -12,15 +12,18 @@ async function startCheckout(request: NextRequest) {
   const baseUrl = siteUrl(request);
 
   if (error || !user) {
-    return NextResponse.redirect(new URL("/login?next=%2Fcheckout", baseUrl), 303);
+    return NextResponse.redirect(new URL("/login?next=%2Fapi%2Fcheckout", baseUrl), 303);
   }
 
-  const { data: membership } = await supabase
+  const { data: membership, error: membershipError } = await supabase
     .from("user_subscriptions")
     .select("status, current_period_end")
     .eq("user_id", user.id)
     .maybeSingle();
 
+  if (membershipError) {
+    return NextResponse.json({ error: "Unable to check membership." }, { status: 500 });
+  }
   if (
     membership &&
     ["active", "trialing"].includes(membership.status) &&

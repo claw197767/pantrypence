@@ -37,6 +37,7 @@ export default function WelcomeStatus({ email }: { email: string }) {
           {state === "active" ? `Your membership is active${email ? ` for ${email}` : ""}. Your private member area is ready.` : state === "pending" ? "Your payment may have completed, but confirmation is still processing. Please refresh shortly or contact us if this continues." : state === "error" ? "Please sign in again, then refresh this page. Contact us if you need help." : "We’re securely checking the payment confirmation from Stripe. This usually takes a few seconds."}
         </p>
         {state === "active" ? <a href="/members" className="mt-8 inline-flex rounded-full bg-[#d6b36a] px-7 py-3 font-bold text-[#171717]">Enter members area</a> : <a href="/welcome" className="mt-8 inline-flex rounded-full border border-white/20 px-7 py-3 font-bold hover:border-[#d6b36a]">Check again</a>}
+        {state === "pending" ? <p className="mt-4 text-sm text-[#b3b5bb]">Not subscribed yet? <a href="/api/checkout" className="text-[#e2c681] underline">Start a membership</a>.</p> : null}
       </section>
     </main>
   );

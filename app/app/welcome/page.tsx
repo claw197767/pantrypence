@@ -26,6 +26,7 @@ async function WelcomeContent() {
   } = await supabase.auth.getUser();
 
   if (!user) redirect("/login?next=%2Fwelcome");
+  if (user.app_metadata?.role === "admin") redirect("/admin/files");
 
   return <WelcomeStatus email={user.email ?? ""} />;
 }

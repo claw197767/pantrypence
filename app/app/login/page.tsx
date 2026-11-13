@@ -2,7 +2,9 @@
 
 import { Suspense, type FormEvent, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { safeNextPath } from "@/lib/safe-next-path";
 
 export default function LoginPage() {
   return (
@@ -20,10 +22,9 @@ export default function LoginPage() {
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const requestedNext = searchParams.get("next") ?? "/welcome";
-  const nextPath = requestedNext.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/welcome";
+  const nextPath = safeNextPath(searchParams.get("next"));
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(searchParams.get("error") === "verification" ? "The sign-in link could not be verified. Request a new link and open it in the same browser." : "");
   const [sending, setSending] = useState(false);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -59,7 +60,7 @@ function LoginForm() {
           <button type="submit" disabled={sending} className="w-full rounded-full bg-[#d6b36a] px-6 py-3 font-bold text-[#171717] disabled:opacity-60">{sending ? "Sending link…" : "Email me a sign-in link"}</button>
         </form>
         {message ? <p role="status" className="mt-5 text-sm leading-6 text-[#e2c681]">{message}</p> : null}
-        <a href="/" className="mt-6 inline-block text-sm text-[#b3b5bb] underline decoration-white/20 underline-offset-4 hover:text-white">Back to home</a>
+        <Link href="/" className="mt-6 inline-block text-sm text-[#b3b5bb] underline decoration-white/20 underline-offset-4 hover:text-white">Back to home</Link>
       </section>
     </main>
   );
