@@ -17,7 +17,7 @@ In Stripe, add a webhook endpoint at `https://YOUR_DOMAIN/api/stripe/webhook` an
 
 1. Apply both migrations in order: `supabase/migrations/20261111000000_private_user_files.sql` and `supabase/migrations/20261112000000_paid_memberships.sql`.
 2. Configure Supabase Auth email/OTP redirect URLs to include `https://YOUR_DOMAIN/auth/callback` and your local development callback.
-3. Set the required environment variables in Vercel and redeploy. Configure the Stripe webhook secret after creating the endpoint.
+3. Set the required environment variables in Vercel for every environment you use (including Preview), then redeploy. Configure the Stripe webhook secret after creating the endpoint. The build can complete without Supabase settings, but authentication and file access will not work until they are configured.
 4. In Supabase, grant `app_metadata.role = admin` only to trusted administrator accounts using a secure server-side admin process. Never authorize from editable `user_metadata`.
 5. Customers begin at `/login`, open their sign-in link in the same browser, then complete checkout at £49/month. Stripe webhook events record subscription state. Active/trialing members can enter `/members` and use their private files. Admins are directed to `/admin/files` and can view all users' files without a subscription. See [private user files](private-user-files.md) for role setup and access details.
 

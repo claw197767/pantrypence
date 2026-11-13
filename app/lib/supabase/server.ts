@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
 export async function createSupabaseServerClient() {
+  const cookieStore = await cookies();
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabasePublishableKey =
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -11,8 +12,6 @@ export async function createSupabaseServerClient() {
       "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
     );
   }
-
-  const cookieStore = await cookies();
 
   return createServerClient(supabaseUrl, supabasePublishableKey, {
     cookies: {
