@@ -71,17 +71,17 @@ export default function Home() {
           </div>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
+            <a href="/login?next=%2Ffiles" className="rounded-full bg-[#d6b36a] px-8 py-4 font-bold text-[#171717] transition hover:bg-[#e4c989]">
+              Log in to your files
+            </a>
             <form action="/api/checkout" method="post">
               <button
                 type="submit"
-                className="rounded-full bg-[#d6b36a] px-8 py-4 font-bold text-[#171717] transition hover:bg-[#e4c989]"
+                className="rounded-full border border-white/20 bg-transparent px-8 py-4 font-bold text-[#f4f1ea] transition hover:border-[#d6b36a] hover:text-[#e2c681]"
               >
                 Get started today
               </button>
             </form>
-            <a href="#features" className="rounded-full border border-white/20 px-8 py-4 font-bold text-[#f4f1ea] transition hover:border-[#d6b36a] hover:text-[#e2c681]">
-              Explore the service
-            </a>
           </div>
           <p className="mt-6 text-sm text-[#858991]">
             Independent, human-reviewed insight for hospitality businesses.
