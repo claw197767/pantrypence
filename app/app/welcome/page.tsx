@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import WelcomeStatus from "./welcome-status";
 
-export default function WelcomePage() {
+export default function WelcomePage({ searchParams }: PageProps<"/welcome">) {
   return (
     <Suspense
       fallback={
@@ -14,12 +14,13 @@ export default function WelcomePage() {
         </main>
       }
     >
-      <WelcomeContent />
+      <WelcomeContent searchParams={searchParams} />
     </Suspense>
   );
 }
 
-async function WelcomeContent() {
+async function WelcomeContent({ searchParams }: { searchParams: PageProps<"/welcome">["searchParams"] }) {
+  const { session_id: sessionId } = await searchParams;
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },
@@ -27,5 +28,5 @@ async function WelcomeContent() {
 
   if (!user) redirect("/login?next=%2Fwelcome");
 
-  return <WelcomeStatus email={user.email ?? ""} />;
+  return <WelcomeStatus email={user.email ?? ""} awaitingPayment={typeof sessionId === "string" && sessionId.length > 0} />;
 }

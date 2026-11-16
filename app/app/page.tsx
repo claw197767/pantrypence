@@ -31,7 +31,7 @@ export default function Home() {
         <div className="flex items-center gap-5 text-sm font-semibold text-[#c2c3c6]">
           <a href="#features" className="hidden transition hover:text-[#d6b36a] sm:block">What we review</a>
           <a href="#how" className="hidden transition hover:text-[#d6b36a] sm:block">How it works</a>
-          <a href="/login?next=%2Ffiles" className="rounded-full border border-white/20 px-5 py-3 transition hover:border-[#d6b36a] hover:text-[#e2c681]">Log in</a>
+          <a href="/login?next=%2Fmembers" className="rounded-full border border-white/20 px-5 py-3 transition hover:border-[#d6b36a] hover:text-[#e2c681]">Log in</a>
           <form action="/api/checkout" method="post">
             <button type="submit" className="rounded-full bg-[#d6b36a] px-5 py-3 font-bold text-[#171717] transition hover:bg-[#e4c989]">
               Get started
