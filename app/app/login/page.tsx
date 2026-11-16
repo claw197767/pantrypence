@@ -27,7 +27,7 @@ function LoginForm() {
   const [method, setMethod] = useState<"password" | "link">("link");
   const [message, setMessage] = useState(
     searchParams.get("error") === "verification"
-      ? "The sign-in link could not be verified. Request a new link and open it in the same browser."
+      ? "The sign-in link has expired or could not be verified. Request a new link and try again."
       : "",
   );
   const [sending, setSending] = useState(false);
@@ -54,7 +54,7 @@ function LoginForm() {
           email,
           options: { emailRedirectTo: callbackUrl.toString(), shouldCreateUser: true },
         });
-        setMessage(error ? error.message : "Check your email for a secure sign-in link and open it in this browser on this device. If you are new, this will create your account.");
+        setMessage(error ? error.message : "Check your email for a secure sign-in link. If you are new, this will create your account.");
       }
     } catch {
       setMessage(
