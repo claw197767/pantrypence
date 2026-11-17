@@ -27,7 +27,7 @@ async function AdminFilesContent() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect("/login?next=%2Fadmin%2Ffiles");
+  if (!user) redirect("/admin/login");
   if (user.app_metadata?.role !== "admin") redirect("/members");
 
   return <AdminFilesList />;
