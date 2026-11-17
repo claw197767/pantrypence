@@ -32,6 +32,7 @@ export default function Home() {
           <a href="#features" className="hidden transition hover:text-[#d6b36a] sm:block">What we review</a>
           <a href="#how" className="hidden transition hover:text-[#d6b36a] sm:block">How it works</a>
           <a href="/login?next=%2Ffiles" className="rounded-full border border-white/20 px-5 py-3 transition hover:border-[#d6b36a] hover:text-[#e2c681]">Log in</a>
+          <a href="/admin/login" className="hidden transition hover:text-[#e2c681] sm:block">Admin</a>
           <form action="/api/checkout" method="post">
             <button type="submit" className="rounded-full bg-[#d6b36a] px-5 py-3 font-bold text-[#171717] transition hover:bg-[#e4c989]">
               Get started
@@ -180,7 +181,13 @@ export default function Home() {
       </section>
 
       <footer className="bg-[#0b0d11] px-6 py-8 text-center text-sm text-[#858991]">
-        © 2026 PantryPence. All rights reserved.
+        <p>© 2026 PantryPence. All rights reserved.</p>
+        <a
+          href="/admin/login"
+          className="mt-3 inline-block transition hover:text-[#e2c681]"
+        >
+          Admin login
+        </a>
       </footer>
     </main>
   );
