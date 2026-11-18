@@ -95,13 +95,40 @@ export async function POST(request: NextRequest) {
     return jsonError("Supported files: PDF, CSV, XLSX, JPEG, and PNG.", 415);
   }
 
+  const isAdmin = user.app_metadata?.role === "admin";
+  let ownerId = user.id;
+  if (isAdmin) {
+    const requestedOwnerId = formData.get("owner_id");
+    if (
+      typeof requestedOwnerId !== "string" ||
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(requestedOwnerId)
+    ) {
+      return jsonError("Choose a member account for this file.", 400);
+    }
+
+    const { data: membership, error: membershipError } = await supabase
+      .from("user_subscriptions")
+      .select("status, current_period_end")
+      .eq("user_id", requestedOwnerId)
+      .maybeSingle();
+
+    if (membershipError) return jsonError("Unable to verify member account.", 500);
+    const active = Boolean(
+      membership &&
+        ["active", "trialing"].includes(membership.status) &&
+        (!membership.current_period_end || new Date(membership.current_period_end) > new Date()),
+    );
+    if (!active) return jsonError("Files can only be assigned to active members.", 404);
+    ownerId = requestedOwnerId;
+  }
+
   const originalFilename =
     file.name
       .replace(/[\\/]/g, "_")
       .replace(/[^\w.() -]/g, "_")
       .trim()
       .slice(0, 120) || "upload";
-  const objectPath = `${user.id}/${crypto.randomUUID()}-${originalFilename}`;
+  const objectPath = `${ownerId}/${crypto.randomUUID()}-${originalFilename}`;
   const { error: uploadError } = await supabase.storage
     .from("user-files")
     .upload(objectPath, file, {
@@ -114,7 +141,7 @@ export async function POST(request: NextRequest) {
   const { data: metadata, error: metadataError } = await supabase
     .from("user_files")
     .insert({
-      owner_id: user.id,
+      owner_id: ownerId,
       uploaded_by_email: user.email ?? "",
       original_filename: originalFilename,
       object_path: objectPath,

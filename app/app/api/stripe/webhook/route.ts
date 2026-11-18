@@ -42,7 +42,7 @@ async function storeSubscription(
       current_period_end: currentPeriodEnd,
       updated_at: new Date().toISOString(),
     },
-    { onConflict: "stripe_subscription_id" },
+    { onConflict: "user_id" },
   );
   if (error) throw error;
 }
