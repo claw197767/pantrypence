@@ -23,7 +23,7 @@ const steps = [
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#1a1e25] text-[#f4f1ea]">
+    <main className="min-h-screen shimmer-surface bg-[#0a1f14] text-[#f4f1ea]">
       <nav className="mx-auto flex max-w-7xl items-center justify-between border-b border-white/10 px-6 py-6">
         <a href="#top" className="text-2xl font-black tracking-tight" id="top">
           Pantry<span className="text-[#d6b36a]">Pence</span>
@@ -85,7 +85,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-[#2e333d] to-[#22262e] p-7 shadow-2xl shadow-black/30 md:p-10">
+        <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-[#17402a] to-[#0d281a] p-7 shadow-2xl shadow-black/30 md:p-10">
           <div aria-hidden="true" className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#d6b36a]/[0.08] blur-3xl" />
           <div className="relative">
             <p className="text-xs font-bold tracking-[0.2em] text-[#d6b36a]">
@@ -116,7 +116,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="features" className="border-y border-white/[0.06] bg-[#21262f] px-6 py-20 md:py-24">
+      <section id="features" className="border-y border-white/[0.06] bg-[#0d281a] px-6 py-20 md:py-24">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-2xl">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#d6b36a]">
@@ -132,7 +132,7 @@ export default function Home() {
           </div>
           <div className="mt-12 grid gap-4 md:grid-cols-3">
             {features.map(([icon, title, description]) => (
-              <div key={title} className="rounded-2xl border border-white/[0.07] bg-[#282d37] p-7 transition hover:border-[#d6b36a]/35">
+              <div key={title} className="rounded-2xl border border-white/[0.07] bg-[#123322] p-7 transition hover:border-[#d6b36a]/35">
                 <div className="text-3xl" aria-hidden="true">{icon}</div>
                 <h3 className="mt-5 text-lg font-semibold text-[#f4f1ea]">{title}</h3>
                 <p className="mt-3 text-sm leading-7 text-[#aeb1b8]">{description}</p>
@@ -160,7 +160,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="contact" className="border-y border-white/[0.06] bg-[#232832] px-6 py-20 text-center md:py-24">
+      <section id="contact" className="border-y border-white/[0.06] bg-[#0d281a] px-6 py-20 text-center md:py-24">
         <div className="mx-auto max-w-3xl">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#d6b36a]">PantryPence</p>
           <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
@@ -176,7 +176,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-[#14181f] px-6 py-8 text-center text-sm text-[#858991]">
+      <footer className="bg-[#06130c] px-6 py-8 text-center text-sm text-[#858991]">
         <p>© 2026 PantryPence. All rights reserved.</p>
         <a
           href="/admin/login"

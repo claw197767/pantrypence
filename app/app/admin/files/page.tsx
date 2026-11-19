@@ -7,7 +7,7 @@ export default function AdminFilesPage() {
   return (
     <Suspense
       fallback={
-        <main className="min-h-screen bg-[#111318] px-6 py-16 text-[#f4f1ea]">
+        <main className="min-h-screen shimmer-surface bg-[#0a1f14] px-6 py-16 text-[#f4f1ea]">
           <div className="mx-auto max-w-6xl">
             <p role="status" className="text-sm text-[#b3b5bb]">
               Checking administrator access…

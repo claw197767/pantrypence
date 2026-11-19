@@ -28,8 +28,8 @@ export default function WelcomeStatus({ email }: { email: string }) {
   }, []);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#111318] px-6 py-16 text-[#f4f1ea]">
-      <section className="w-full max-w-xl rounded-3xl border border-white/10 bg-[#1b1e25] p-8 text-center shadow-2xl sm:p-12">
+    <main className="flex min-h-screen items-center justify-center shimmer-surface bg-[#0a1f14] px-6 py-16 text-[#f4f1ea]">
+      <section className="w-full max-w-xl rounded-3xl border border-white/10 bg-[#12311f] p-8 text-center shadow-2xl sm:p-12">
         <div aria-hidden="true" className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#d6b36a]/15 text-3xl text-[#d6b36a]">{state === "active" ? "✓" : "…"}</div>
         <p className="mt-7 text-xs font-bold uppercase tracking-[0.2em] text-[#d6b36a]">PantryPence</p>
         <h1 className="mt-3 text-3xl font-semibold">{state === "active" ? "Welcome to your membership" : state === "pending" ? "Payment confirmation is taking longer" : state === "error" ? "We couldn’t verify your membership" : "Confirming your membership…"}</h1>

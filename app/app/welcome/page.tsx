@@ -7,7 +7,7 @@ export default function WelcomePage() {
   return (
     <Suspense
       fallback={
-        <main className="flex min-h-screen items-center justify-center bg-[#111318] px-6 py-16 text-[#f4f1ea]">
+        <main className="flex min-h-screen items-center justify-center shimmer-surface bg-[#0a1f14] px-6 py-16 text-[#f4f1ea]">
           <p role="status" className="text-sm text-[#b3b5bb]">
             Checking your account…
           </p>

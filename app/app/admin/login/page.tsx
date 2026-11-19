@@ -45,8 +45,8 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#111318] px-6 py-16 text-[#f4f1ea]">
-      <section className="w-full max-w-md rounded-3xl border border-white/10 bg-[#1b1e25] p-8 shadow-2xl">
+    <main className="flex min-h-screen items-center justify-center shimmer-surface bg-[#0a1f14] px-6 py-16 text-[#f4f1ea]">
+      <section className="w-full max-w-md rounded-3xl border border-white/10 bg-[#12311f] p-8 shadow-2xl">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#d6b36a]">
           PantryPence administration
         </p>
@@ -67,7 +67,7 @@ export default function AdminLoginPage() {
               required
               value={username}
               onChange={(event) => setUsername(event.target.value)}
-              className="mt-2 w-full rounded-xl border border-white/15 bg-[#111318] px-4 py-3 text-white outline-none focus:border-[#d6b36a]"
+              className="mt-2 w-full rounded-xl border border-white/15 bg-[#0a1f14] px-4 py-3 text-white outline-none focus:border-[#d6b36a]"
             />
           </div>
           <div>
@@ -82,7 +82,7 @@ export default function AdminLoginPage() {
               required
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="mt-2 w-full rounded-xl border border-white/15 bg-[#111318] px-4 py-3 text-white outline-none focus:border-[#d6b36a]"
+              className="mt-2 w-full rounded-xl border border-white/15 bg-[#0a1f14] px-4 py-3 text-white outline-none focus:border-[#d6b36a]"
             />
           </div>
           <button

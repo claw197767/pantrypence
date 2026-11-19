@@ -8,7 +8,7 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <main className="flex min-h-screen items-center justify-center bg-[#111318] px-6 py-16 text-[#f4f1ea]">
+        <main className="flex min-h-screen items-center justify-center shimmer-surface bg-[#0a1f14] px-6 py-16 text-[#f4f1ea]">
           <p role="status" className="text-sm text-[#b3b5bb]">Loading secure sign-in…</p>
         </main>
       }
@@ -48,14 +48,14 @@ function LoginForm() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#111318] px-6 py-16 text-[#f4f1ea]">
-      <section className="w-full max-w-md rounded-3xl border border-white/10 bg-[#1b1e25] p-8 shadow-2xl">
+    <main className="flex min-h-screen items-center justify-center shimmer-surface bg-[#0a1f14] px-6 py-16 text-[#f4f1ea]">
+      <section className="w-full max-w-md rounded-3xl border border-white/10 bg-[#12311f] p-8 shadow-2xl">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#d6b36a]">PantryPence membership</p>
         <h1 className="mt-4 text-3xl font-semibold">Sign in or create your account</h1>
         <p className="mt-3 leading-7 text-[#b3b5bb]">We’ll email you a secure link. Sign in before checkout so your payment and private member area are tied to the right account.</p>
         <form onSubmit={submit} className="mt-7 space-y-4">
           <label htmlFor="email" className="block text-sm font-semibold">Email address</label>
-          <input id="email" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} className="w-full rounded-xl border border-white/15 bg-[#111318] px-4 py-3 text-white outline-none focus:border-[#d6b36a]" />
+          <input id="email" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} className="w-full rounded-xl border border-white/15 bg-[#0a1f14] px-4 py-3 text-white outline-none focus:border-[#d6b36a]" />
           <button type="submit" disabled={sending} className="w-full rounded-full bg-[#d6b36a] px-6 py-3 font-bold text-[#171717] disabled:opacity-60">{sending ? "Sending link…" : "Email me a sign-in link"}</button>
         </form>
         {message ? <p role="status" className="mt-5 text-sm leading-6 text-[#e2c681]">{message}</p> : null}

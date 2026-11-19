@@ -118,7 +118,7 @@ export default function FilesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#111318] px-6 py-16 text-[#f4f1ea]">
+    <main className="min-h-screen shimmer-surface bg-[#0a1f14] px-6 py-16 text-[#f4f1ea]">
       <div className="mx-auto max-w-5xl">
         <div className="mb-8 flex items-center justify-between gap-4">
           <div>
@@ -130,7 +130,7 @@ export default function FilesPage() {
           </a>
         </div>
 
-        <form onSubmit={handleUpload} className="rounded-3xl border border-white/10 bg-[#1b1e25] p-6 shadow-xl">
+        <form onSubmit={handleUpload} className="rounded-3xl border border-white/10 bg-[#12311f] p-6 shadow-xl">
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div className="flex-1">
               <label htmlFor="private-file" className="mb-2 block text-sm font-semibold">Upload a document</label>
@@ -138,7 +138,7 @@ export default function FilesPage() {
                 id="private-file"
                 type="file"
                 onChange={(event) => setSelectedFile(event.target.files?.[0] ?? null)}
-                className="block w-full rounded-2xl border border-white/15 bg-[#111318] px-4 py-3 text-sm text-[#e7e4dc] file:mr-4 file:rounded-full file:border-0 file:bg-[#d6b36a] file:px-4 file:py-2 file:font-bold file:text-[#171717]"
+                className="block w-full rounded-2xl border border-white/15 bg-[#0a1f14] px-4 py-3 text-sm text-[#e7e4dc] file:mr-4 file:rounded-full file:border-0 file:bg-[#d6b36a] file:px-4 file:py-2 file:font-bold file:text-[#171717]"
               />
             </div>
             <button
@@ -157,17 +157,17 @@ export default function FilesPage() {
             <p className="text-xs uppercase tracking-[0.2em] text-[#d6b36a]">Files</p>
             <p className="mt-4 text-3xl font-semibold">{files.length}</p>
           </div>
-          <div className="rounded-3xl border border-white/10 bg-[#1b1e25] p-5">
+          <div className="rounded-3xl border border-white/10 bg-[#12311f] p-5">
             <p className="text-xs uppercase tracking-[0.2em] text-[#aeb1b8]">Storage used</p>
             <p className="mt-4 text-3xl font-semibold">{(fileSummary / 1024 / 1024).toFixed(2)} MB</p>
           </div>
-          <div className="rounded-3xl border border-white/10 bg-[#1b1e25] p-5">
+          <div className="rounded-3xl border border-white/10 bg-[#12311f] p-5">
             <p className="text-xs uppercase tracking-[0.2em] text-[#aeb1b8]">Status</p>
             <p className="mt-4 text-lg font-semibold">{status === "ready" ? "Secure" : status === "unauthenticated" ? "Sign in required" : status === "error" ? "Action needed" : "Checking"}</p>
           </div>
         </section>
 
-        <section className="mt-8 rounded-3xl border border-white/10 bg-[#1b1e25] p-6 shadow-xl">
+        <section className="mt-8 rounded-3xl border border-white/10 bg-[#12311f] p-6 shadow-xl">
           <div className="mb-4 flex items-center justify-between gap-4">
             <h2 className="text-xl font-semibold">Your file list</h2>
             <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-[#d6b36a]">
@@ -188,7 +188,7 @@ export default function FilesPage() {
           ) : (
             <div className="space-y-3">
               {files.map((file) => (
-                <div key={file.id} className="flex flex-col gap-3 rounded-2xl border border-white/[0.07] bg-[#111318] p-4 md:flex-row md:items-center md:justify-between">
+                <div key={file.id} className="flex flex-col gap-3 rounded-2xl border border-white/[0.07] bg-[#0a1f14] p-4 md:flex-row md:items-center md:justify-between">
                   <div>
                     <p className="font-semibold">{file.original_filename}</p>
                     <p className="mt-1 text-sm text-[#aeb1b8]">
