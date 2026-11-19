@@ -170,7 +170,7 @@ export default function Home() {
             Discover a smarter way to understand your food business
             and make every penny work harder.
           </p>
-          <a href="mailto:hello@pantrypence.co.uk" className="mt-9 inline-block rounded-full bg-[#d6b36a] px-9 py-4 font-bold text-[#171717] transition hover:bg-[#e4c989]">
+          <a href="mailto:admin@pantrypence.co.uk" className="mt-9 inline-block rounded-full bg-[#d6b36a] px-9 py-4 font-bold text-[#171717] transition hover:bg-[#e4c989]">
             Contact PantryPence →
           </a>
         </div>
