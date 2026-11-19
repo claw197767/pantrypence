@@ -13,6 +13,7 @@ const features = [
   ["📦", "Supplier insights", "Keep track of supplier prices and purchasing trends."],
   ["💷", "Cost control", "Understand where your money goes and where improvements may be possible."],
   ["📈", "Business insights", "Turn your numbers into practical actions for your business."],
+  ["👥", "Labour review", "Review staffing costs and understand labour as a percentage of turnover."],
 ];
 
 const steps = [
