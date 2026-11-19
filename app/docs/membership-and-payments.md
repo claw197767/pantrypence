@@ -25,3 +25,7 @@ In Stripe, add a webhook endpoint at `https://YOUR_DOMAIN/api/stripe/webhook` an
 6. Customers begin at `/login`, verify their email, then complete checkout at £49/month. Stripe webhook events record subscription state. Only active/trialing members can enter `/members` and use private files. Admins can view files at `/admin/files` and upload reports directly to an active member's account.
 
 The success page waits for a verified Stripe webhook-backed membership record; the browser redirect alone never grants access. The API and database/storage RLS both enforce active membership and owner/admin boundaries. Apply `supabase/migrations/20261113000000_admin_member_file_delivery.sql` after the membership migration to enable administrator report delivery.
+
+## Complimentary memberships
+
+To grant free access without Stripe billing, run `scripts/grant-complimentary-membership.mjs` with `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `MEMBER_EMAIL` set in the environment (optionally `MEMBER_PERIOD_END` as an ISO date to expire the membership). The script creates the Auth user if needed and upserts an active `user_subscriptions` row with a synthetic `comp_` subscription id, so `has_active_membership()` grants member access.
