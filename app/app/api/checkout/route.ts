@@ -36,6 +36,29 @@ async function startCheckout(request: NextRequest) {
 
   try {
     const stripe = new Stripe(secretKey);
+
+    // Guard against duplicate subscriptions: the membership row is written by
+    // the Stripe webhook, so right after payment it may not exist yet. If the
+    // customer already has an active/trialing subscription in Stripe, send
+    // them to the welcome page instead of creating another checkout session.
+    if (user.email) {
+      const customers = await stripe.customers.list({ email: user.email, limit: 1 });
+      const customer = customers.data[0];
+      if (customer) {
+        const subscriptions = await stripe.subscriptions.list({
+          customer: customer.id,
+          status: "all",
+          limit: 20,
+        });
+        const hasLiveSubscription = subscriptions.data.some(
+          (subscription) => subscription.status === "active" || subscription.status === "trialing",
+        );
+        if (hasLiveSubscription) {
+          return NextResponse.redirect(new URL("/welcome", baseUrl), 303);
+        }
+      }
+    }
+
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       client_reference_id: user.id,

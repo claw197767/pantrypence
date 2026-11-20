@@ -13,7 +13,7 @@ type UserFile = {
   signed_url?: string;
 };
 
-type PageStatus = "loading" | "ready" | "unauthenticated" | "error";
+type PageStatus = "loading" | "ready" | "unauthenticated" | "membership" | "error";
 
 export default function FilesPage() {
   const [files, setFiles] = useState<UserFile[]>([]);
@@ -32,6 +32,23 @@ export default function FilesPage() {
     setMessage("Loading your files…");
 
     try {
+      const membershipResponse = await fetch("/api/membership", { cache: "no-store" });
+
+      if (membershipResponse.status === 401) {
+        setFiles([]);
+        setStatus("unauthenticated");
+        setMessage("Please sign in to manage your private files.");
+        return;
+      }
+
+      const membership = await membershipResponse.json().catch(() => ({}));
+      if (membershipResponse.ok && !membership.active) {
+        setFiles([]);
+        setStatus("membership");
+        setMessage("An active PantryPence membership is required to upload and view private files.");
+        return;
+      }
+
       const response = await fetch("/api/files", { cache: "no-store" });
       const data = await response.json().catch(() => ({}));
 
@@ -163,7 +180,7 @@ export default function FilesPage() {
           </div>
           <div className="rounded-3xl border border-white/10 bg-[#12311f] p-5">
             <p className="text-xs uppercase tracking-[0.2em] text-[#aeb1b8]">Status</p>
-            <p className="mt-4 text-lg font-semibold">{status === "ready" ? "Secure" : status === "unauthenticated" ? "Sign in required" : status === "error" ? "Action needed" : "Checking"}</p>
+            <p className="mt-4 text-lg font-semibold">{status === "ready" ? "Secure" : status === "unauthenticated" ? "Sign in required" : status === "membership" ? "Membership required" : status === "error" ? "Action needed" : "Checking"}</p>
           </div>
         </section>
 
@@ -177,7 +194,16 @@ export default function FilesPage() {
 
           {message ? <p role="status" className="mb-4 text-sm text-[#aeb1b8]">{message}</p> : null}
 
-          {status === "unauthenticated" ? (
+          {status === "membership" ? (
+            <div className="rounded-2xl border border-dashed border-[#d6b36a]/40 bg-[#d6b36a]/[0.06] p-8 text-center">
+              <p className="text-[#e2c681]">
+                Start your membership to upload and view bills, invoices, receipts, and supporting files.
+              </p>
+              <a href="/api/checkout" className="mt-5 inline-flex rounded-full bg-[#d6b36a] px-7 py-3 font-bold text-[#171717] transition hover:bg-[#e4c989]">
+                Start membership — £49/month
+              </a>
+            </div>
+          ) : status === "unauthenticated" ? (
             <div className="rounded-2xl border border-dashed border-white/20 bg-black/10 p-8 text-center text-[#aeb1b8]">
               Sign in to view or upload bills, invoices, receipts, and supporting files.
             </div>
