@@ -18,11 +18,6 @@ export const metadata: Metadata = {
     template: "%s | PantryPence",
   },
   description: "Monthly profit and margin audits for hospitality businesses.",
-  icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
-  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

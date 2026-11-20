@@ -1,6 +1,7 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -47,6 +48,7 @@ export default function AdminLoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center shimmer-surface bg-[#0a1f14] px-6 py-16 text-[#f4f1ea]">
       <section className="w-full max-w-md rounded-3xl border border-white/10 bg-[#12311f] p-8 shadow-2xl">
+        <Image src="/logo-full.png" alt="PantryPence" width={868} height={590} className="mb-6 w-52 rounded-2xl" />
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#d6b36a]">
           PantryPence administration
         </p>

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function SignedOutPage(props: PageProps<"/signed-out">) {
@@ -24,6 +25,7 @@ async function SignedOutContent({
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f7f7ef] px-6 py-16 text-[#183b2b]">
       <section className="w-full max-w-lg rounded-3xl bg-white p-8 text-center shadow-xl sm:p-12">
+        <Image src="/logo-full.png" alt="PantryPence" width={868} height={590} className="mx-auto mb-7 w-56 rounded-2xl" />
         <div
           aria-hidden="true"
           className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#e7ead8] text-3xl text-[#536b37]"
