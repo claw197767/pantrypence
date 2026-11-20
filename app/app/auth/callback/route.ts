@@ -3,8 +3,15 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code");
+  const authError = request.nextUrl.searchParams.get("error");
+  const authErrorCode = request.nextUrl.searchParams.get("error_code");
   const nextPath = request.nextUrl.searchParams.get("next") ?? "/welcome";
   const safeNextPath = nextPath.startsWith("/") && !nextPath.startsWith("//") ? nextPath : "/welcome";
+
+  if (authError) {
+    const reason = encodeURIComponent(authErrorCode ?? authError);
+    return NextResponse.redirect(new URL(`/login?error=${reason}`, request.url));
+  }
 
   if (!code) return NextResponse.redirect(new URL("/login?error=verification", request.url));
 

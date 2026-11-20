@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { AuthErrorRedirect } from "./auth-error-redirect";
 
 const sectors = [
   "Public houses",
@@ -27,6 +28,7 @@ const steps = [
 export default function Home() {
   return (
     <main className="min-h-screen shimmer-surface bg-[#0a1f14] text-[#f4f1ea]">
+      <AuthErrorRedirect />
       <nav className="mx-auto flex max-w-7xl items-center justify-between border-b border-white/10 px-6 py-6">
         <a href="#top" className="flex items-center gap-3 text-2xl font-black tracking-tight" id="top">
           <Image src="/logo-mark.png" alt="PantryPence logo" width={512} height={512} className="h-11 w-11 rounded-xl" />

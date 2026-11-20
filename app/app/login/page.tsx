@@ -23,6 +23,12 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const requestedNext = searchParams.get("next") ?? "/welcome";
   const nextPath = requestedNext.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/welcome";
+  const authError = searchParams.get("error");
+  const authErrorMessage = authError
+    ? authError === "otp_expired"
+      ? "That sign-in link has expired or was already used. Request a new one below — use the most recent email and open it straight away."
+      : "We couldn't verify your sign-in link. Please request a new one below."
+    : null;
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
@@ -55,6 +61,11 @@ function LoginForm() {
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#d6b36a]">PantryPence membership</p>
         <h1 className="mt-4 text-3xl font-semibold">Sign in or create your account</h1>
         <p className="mt-3 leading-7 text-[#b3b5bb]">We’ll email you a secure link. Sign in before checkout so your payment and private member area are tied to the right account.</p>
+        {authErrorMessage ? (
+          <p role="alert" className="mt-5 rounded-xl border border-[#d6b36a]/40 bg-[#d6b36a]/10 px-4 py-3 text-sm leading-6 text-[#e2c681]">
+            {authErrorMessage}
+          </p>
+        ) : null}
         <form onSubmit={submit} className="mt-7 space-y-4">
           <label htmlFor="email" className="block text-sm font-semibold">Email address</label>
           <input id="email" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} className="w-full rounded-xl border border-white/15 bg-[#0a1f14] px-4 py-3 text-white outline-none focus:border-[#d6b36a]" />
