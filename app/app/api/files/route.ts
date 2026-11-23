@@ -136,7 +136,13 @@ export async function POST(request: NextRequest) {
       upsert: false,
     });
 
-  if (uploadError) return jsonError("Unable to upload file.", 400);
+  if (uploadError) {
+    console.error("Storage upload failed", {
+      message: uploadError.message,
+      name: uploadError.name,
+    });
+    return jsonError("Unable to upload file.", 400);
+  }
 
   const { data: metadata, error: metadataError } = await supabase
     .from("user_files")
