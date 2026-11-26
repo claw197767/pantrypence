@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { SignOutButton } from "@/app/sign-out-button";
 
 export default function MembersPage() {
   return (
@@ -43,7 +44,10 @@ async function MembersContent() {
   return (
     <main className="min-h-screen shimmer-surface bg-[#0a1f14] px-6 py-16 text-[#f4f1ea]">
       <div className="mx-auto max-w-5xl">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#d6b36a]">Members area</p>
+        <div className="flex items-center justify-between gap-4">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#d6b36a]">Members area</p>
+          <SignOutButton />
+        </div>
         <h1 className="mt-3 text-4xl font-semibold">Welcome back</h1>
         <p className="mt-3 text-[#b3b5bb]">Signed in as {user.email}. Your documents are private to you and authorized PantryPence administrators.</p>
         <section className="mt-10 rounded-3xl border border-white/10 bg-[#12311f] p-8">

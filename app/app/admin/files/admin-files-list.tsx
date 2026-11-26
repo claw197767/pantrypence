@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SignOutButton } from "@/app/sign-out-button";
 
 type AdminFile = { id: string; owner_id: string; uploaded_by_email: string; original_filename: string; content_type: string; file_size: number; created_at: string };
 type Member = { id: string; email: string };
@@ -82,7 +83,10 @@ export default function AdminFilesList() {
   return (
     <main className="min-h-screen shimmer-surface bg-[#0a1f14] px-6 py-16 text-[#f4f1ea]">
       <div className="mx-auto max-w-6xl">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#d6b36a]">Administrator</p>
+        <div className="flex items-center justify-between gap-4">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#d6b36a]">Administrator</p>
+          <SignOutButton />
+        </div>
         <h1 className="mt-3 text-4xl font-semibold">Member documents</h1>
         <p className="mt-3 text-[#b3b5bb]">Private customer files. Handle and download only when required to provide the service.</p>
         <form onSubmit={uploadForMember} className="mt-8 grid gap-4 rounded-3xl border border-white/10 bg-[#12311f] p-6 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
