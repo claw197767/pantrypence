@@ -31,9 +31,9 @@ export default function Home() {
     <main className="min-h-screen shimmer-surface bg-[#0a1f14] text-[#f4f1ea]">
       <AuthErrorRedirect />
       <CheckoutCancelledBanner />
-      <nav className="mx-auto flex max-w-7xl items-center justify-between border-b border-white/10 px-6 py-6">
-        <a href="#top" className="flex items-center gap-3 text-2xl font-black tracking-tight" id="top">
-          <Image src="/logo-mark.png" alt="PantryPence logo" width={512} height={512} className="h-11 w-11 rounded-xl" />
+      <nav className="mx-auto flex max-w-7xl items-center justify-between border-b border-white/10 px-6 py-4">
+        <a href="#top" className="flex items-center gap-2.5 text-xl font-semibold tracking-wide" id="top">
+          <Image src="/logo-mark.svg" alt="PantryPence logo" width={48} height={48} className="h-8 w-8" />
           Pantry<span className="text-[#d6b36a]">Pence</span>
         </a>
         <div className="flex items-center gap-5 text-sm font-semibold text-[#c2c3c6]">

@@ -25,7 +25,9 @@ async function SignedOutContent({
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f7f7ef] px-6 py-16 text-[#183b2b]">
       <section className="w-full max-w-lg rounded-3xl bg-white p-8 text-center shadow-xl sm:p-12">
-        <Image src="/logo-full.png" alt="PantryPence" width={868} height={590} className="mx-auto mb-7 w-56 rounded-2xl" />
+        <div className="mx-auto mb-7 flex h-20 w-20 items-center justify-center rounded-3xl bg-[#0a1f14]">
+          <Image src="/logo-mark.svg" alt="PantryPence logo" width={48} height={48} className="h-11 w-11" />
+        </div>
         <div
           aria-hidden="true"
           className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#e7ead8] text-3xl text-[#536b37]"
