@@ -31,18 +31,18 @@ export default function Home() {
     <main className="min-h-screen shimmer-surface bg-[#0a1f14] text-[#f4f1ea]">
       <AuthErrorRedirect />
       <CheckoutCancelledBanner />
-      <nav className="mx-auto flex max-w-7xl items-center justify-between border-b border-white/10 px-6 py-4">
-        <a href="#top" className="flex items-center gap-2.5 text-xl font-semibold tracking-wide" id="top">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between border-b border-white/10 px-4 py-4 sm:px-6">
+        <a href="#top" className="flex shrink-0 items-center gap-2.5 whitespace-nowrap text-xl font-semibold tracking-wide" id="top">
           <Image src="/logo-mark.svg" alt="PantryPence logo" width={48} height={48} className="h-8 w-8" />
           Pantry<span className="text-[#d6b36a]">Pence</span>
         </a>
-        <div className="flex items-center gap-5 text-sm font-semibold text-[#c2c3c6]">
+        <div className="flex shrink-0 items-center gap-3 text-sm font-semibold text-[#c2c3c6] sm:gap-5">
           <a href="#features" className="hidden transition hover:text-[#d6b36a] sm:block">What we review</a>
           <a href="#how" className="hidden transition hover:text-[#d6b36a] sm:block">How it works</a>
           <a href="/pricing" className="hidden transition hover:text-[#d6b36a] sm:block">Pricing</a>
-          <a href="/login?next=%2Fmembers" className="rounded-full border border-white/20 px-5 py-3 transition hover:border-[#d6b36a] hover:text-[#e2c681]">Log in</a>
+          <a href="/login?next=%2Fmembers" className="hidden whitespace-nowrap rounded-full border border-white/20 px-5 py-3 transition hover:border-[#d6b36a] hover:text-[#e2c681] sm:inline-flex">Log in</a>
           <a href="/admin/login" className="hidden transition hover:text-[#e2c681] sm:block">Admin</a>
-          <a href="/login?next=%2Fapi%2Fcheckout" className="rounded-full bg-[#d6b36a] px-5 py-3 font-bold text-[#171717] transition hover:bg-[#e4c989]">
+          <a href="/login?next=%2Fapi%2Fcheckout" className="whitespace-nowrap rounded-full bg-[#d6b36a] px-5 py-3 font-bold text-[#171717] transition hover:bg-[#e4c989]">
             Get started
           </a>
         </div>
@@ -50,7 +50,7 @@ export default function Home() {
 
       <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 md:grid-cols-[1.05fr_0.95fr] md:py-28">
         <div>
-          <span className="mb-6 inline-flex rounded-full border border-[#d6b36a]/30 bg-[#d6b36a]/10 px-4 py-2 text-xs font-bold tracking-[0.18em] text-[#e2c681]">
+          <span className="mb-6 inline-flex rounded-full border border-[#d6b36a]/30 bg-[#d6b36a]/10 px-4 py-2 text-center text-xs font-bold tracking-[0.18em] text-[#e2c681]">
             MONTHLY PROFIT &amp; MARGIN AUDITS
           </span>
           <h1 className="text-5xl font-semibold leading-[1.08] tracking-tight md:text-7xl">

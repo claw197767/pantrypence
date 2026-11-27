@@ -138,13 +138,13 @@ export default function FilesClient() {
   return (
     <main className="min-h-screen shimmer-surface bg-[#0a1f14] px-6 py-16 text-[#f4f1ea]">
       <div className="mx-auto max-w-5xl">
-        <div className="mb-8 flex items-center justify-between gap-4">
+        <div className="mb-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#d6b36a]">PantryPence files</p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight">Your private uploads</h1>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Your private uploads</h1>
           </div>
-          <div className="flex items-center gap-3">
-            <a href="/members" className="rounded-full border border-white/20 px-5 py-3 text-sm font-bold transition hover:border-[#d6b36a] hover:text-[#e2c681]">
+          <div className="flex flex-wrap items-center gap-3">
+            <a href="/members" className="whitespace-nowrap rounded-full border border-white/20 px-5 py-3 text-sm font-bold transition hover:border-[#d6b36a] hover:text-[#e2c681]">
               Members area
             </a>
             <SignOutButton />
