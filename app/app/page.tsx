@@ -42,7 +42,7 @@ export default function Home() {
           <a href="/pricing" className="hidden transition hover:text-[#d6b36a] sm:block">Pricing</a>
           <a href="/login?next=%2Fmembers" className="hidden whitespace-nowrap rounded-full border border-white/20 px-5 py-3 transition hover:border-[#d6b36a] hover:text-[#e2c681] sm:inline-flex">Log in</a>
           <a href="/admin/login" className="hidden transition hover:text-[#e2c681] sm:block">Admin</a>
-          <a href="/login?next=%2Fapi%2Fcheckout" className="whitespace-nowrap rounded-full bg-[#d6b36a] px-5 py-3 font-bold text-[#171717] transition hover:bg-[#e4c989]">
+          <a href="/login?next=%2Fapi%2Fcheckout" className="whitespace-nowrap rounded-full bg-[#d6b36a] px-4 py-2.5 text-[13px] font-bold text-[#171717] transition hover:bg-[#e4c989] sm:px-5 sm:py-3 sm:text-sm">
             Get started
           </a>
         </div>
