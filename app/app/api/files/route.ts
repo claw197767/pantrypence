@@ -99,27 +99,33 @@ export async function POST(request: NextRequest) {
   let ownerId = user.id;
   if (isAdmin) {
     const requestedOwnerId = formData.get("owner_id");
-    if (
-      typeof requestedOwnerId !== "string" ||
-      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(requestedOwnerId)
-    ) {
-      return jsonError("Choose a member account for this file.", 400);
+    // The admin share form always sends owner_id; the member files form
+    // never does. An admin uploading from the member form is uploading to
+    // their own account, so only run the share checks when owner_id was
+    // actually supplied.
+    if (requestedOwnerId !== null) {
+      if (
+        typeof requestedOwnerId !== "string" ||
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(requestedOwnerId)
+      ) {
+        return jsonError("Choose a member account for this file.", 400);
+      }
+
+      const { data: membership, error: membershipError } = await supabase
+        .from("user_subscriptions")
+        .select("status, current_period_end")
+        .eq("user_id", requestedOwnerId)
+        .maybeSingle();
+
+      if (membershipError) return jsonError("Unable to verify member account.", 500);
+      const active = Boolean(
+        membership &&
+          ["active", "trialing"].includes(membership.status) &&
+          (!membership.current_period_end || new Date(membership.current_period_end) > new Date()),
+      );
+      if (!active) return jsonError("Files can only be assigned to active members.", 404);
+      ownerId = requestedOwnerId;
     }
-
-    const { data: membership, error: membershipError } = await supabase
-      .from("user_subscriptions")
-      .select("status, current_period_end")
-      .eq("user_id", requestedOwnerId)
-      .maybeSingle();
-
-    if (membershipError) return jsonError("Unable to verify member account.", 500);
-    const active = Boolean(
-      membership &&
-        ["active", "trialing"].includes(membership.status) &&
-        (!membership.current_period_end || new Date(membership.current_period_end) > new Date()),
-    );
-    if (!active) return jsonError("Files can only be assigned to active members.", 404);
-    ownerId = requestedOwnerId;
   }
 
   const originalFilename =
